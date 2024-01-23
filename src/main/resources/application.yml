@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ParkingNotification
+  jpa:
+    show-sql: true
+    database: postgresql
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/digitalparking-db
+    username: digitalparking-postgres-user
+    password: digitalparking-postgres-pwd
+
+server:
+  port: 8081
