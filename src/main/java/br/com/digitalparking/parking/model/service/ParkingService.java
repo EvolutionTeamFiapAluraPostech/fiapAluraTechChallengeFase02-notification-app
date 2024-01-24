@@ -23,4 +23,10 @@ public class ParkingService {
     return parkingRepository.findByParkingStateAndParkingTypeAndFinalParkingBetween(parkingState,
         parkingType, initialParkingDateTime, finishParkingDateTime);
   }
+
+  public List<Parking> findByParkingStateAndParkingTypeAndInitialParkingGreaterThanEqual(
+      ParkingState parkingState, ParkingType parkingType, LocalDateTime initialParkingDateTime) {
+    return parkingRepository.findByParkingStateAndParkingTypeAndInitialParkingGreaterThanEqual(
+        parkingState, parkingType, initialParkingDateTime);
+  }
 }

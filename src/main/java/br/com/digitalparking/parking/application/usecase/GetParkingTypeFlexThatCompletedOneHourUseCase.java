@@ -18,8 +18,7 @@ public class GetParkingTypeFlexThatCompletedOneHourUseCase {
   }
 
   public List<Parking> execute(String parkingType, LocalDateTime initialDateTime) {
-    var finalDateTime = initialDateTime.plusMinutes(1);
-    return parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
-        ParkingType.valueOf(parkingType), initialDateTime, finalDateTime);
+    return parkingService.findByParkingStateAndParkingTypeAndInitialParkingGreaterThanEqual(
+        ParkingState.BUSY, ParkingType.valueOf(parkingType), initialDateTime.minusHours(1));
   }
 }

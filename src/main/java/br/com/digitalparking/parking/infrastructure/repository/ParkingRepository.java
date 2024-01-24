@@ -12,4 +12,7 @@ public interface ParkingRepository extends JpaRepository<Parking, UUID> {
 
   List<Parking> findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState parkingState,
       ParkingType parkingType, LocalDateTime initialDateTime, LocalDateTime finalDateTime);
+
+  List<Parking> findByParkingStateAndParkingTypeAndInitialParkingGreaterThanEqual(
+      ParkingState parkingState, ParkingType parkingType, LocalDateTime initialDateTime);
 }
