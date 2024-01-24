@@ -1,6 +1,7 @@
 package br.com.digitalparking.parking.application.usecase;
 
 import br.com.digitalparking.parking.model.entity.Parking;
+import br.com.digitalparking.parking.model.enums.ParkingState;
 import br.com.digitalparking.parking.model.enums.ParkingType;
 import br.com.digitalparking.parking.model.service.ParkingService;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class GetParkingTypeFixedThatWillFinishIn15MinutesFromNowUseCase {
   public List<Parking> execute(String parkingType, LocalDateTime actualDateTime) {
     var initialDateTime = actualDateTime.plusMinutes(15);
     var finalDateTime = initialDateTime.plusMinutes(1);
-    return parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.valueOf(parkingType),
-        initialDateTime, finalDateTime);
+    return parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.valueOf(parkingType), initialDateTime, finalDateTime);
   }
 }

@@ -4,6 +4,7 @@ import static br.com.digitalparking.shared.testData.parking.ParkingTestData.crea
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import br.com.digitalparking.parking.model.enums.ParkingState;
 import br.com.digitalparking.parking.model.enums.ParkingType;
 import br.com.digitalparking.parking.model.service.ParkingService;
 import java.time.LocalDateTime;
@@ -29,8 +30,8 @@ class GetParkingTypeFlexThatCompletedOneHourUseCaseTest {
     var finalDateTime = initialDateTime.plusMinutes(1);
     var parking = createNewParking();
     parking.setFinalParking(initialDateTime);
-    when(parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.FLEX, initialDateTime,
-        finalDateTime)).thenReturn(List.of(parking));
+    when(parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.FLEX, initialDateTime, finalDateTime)).thenReturn(List.of(parking));
 
     var parkingList = getParkingTypeFlexThatCompletedOneHourUseCase.execute(
         ParkingType.FLEX.name(), initialDateTime);
@@ -42,8 +43,8 @@ class GetParkingTypeFlexThatCompletedOneHourUseCaseTest {
   void shouldNotFindParkingFlexWhenParkingDoesNotExistWithFinishDateTimeParkingIs1minuteFromNow() {
     var initialDateTime = LocalDateTime.now();
     var finalDateTime = initialDateTime.plusMinutes(1);
-    when(parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.FLEX, initialDateTime,
-        finalDateTime)).thenReturn(Collections.emptyList());
+    when(parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.FLEX, initialDateTime, finalDateTime)).thenReturn(Collections.emptyList());
 
     var parkingList = getParkingTypeFlexThatCompletedOneHourUseCase.execute(
         ParkingType.FLEX.name(), initialDateTime);

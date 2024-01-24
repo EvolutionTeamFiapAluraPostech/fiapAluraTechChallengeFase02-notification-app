@@ -4,6 +4,7 @@ import static br.com.digitalparking.shared.testData.parking.ParkingTestData.crea
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import br.com.digitalparking.parking.model.enums.ParkingState;
 import br.com.digitalparking.parking.model.enums.ParkingType;
 import br.com.digitalparking.parking.model.service.ParkingService;
 import java.time.LocalDateTime;
@@ -30,8 +31,8 @@ class GetParkingTypeFixedThatWillFinishIn15MinutesFromNowUseCaseTest {
     var finalDateTime = initialDateTime.plusMinutes(1);
     var parking = createNewParking();
     parking.setFinalParking(initialDateTime);
-    when(parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED, initialDateTime,
-        finalDateTime)).thenReturn(List.of(parking));
+    when(parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.FIXED, initialDateTime, finalDateTime)).thenReturn(List.of(parking));
 
     var parkingList = getParkingTypeFixedThatWillFinishIn15MinutesFromNowUseCase.execute(
         ParkingType.FIXED.name(), actualDateTime);
@@ -44,8 +45,8 @@ class GetParkingTypeFixedThatWillFinishIn15MinutesFromNowUseCaseTest {
     var actualDateTime = LocalDateTime.now();
     var initialDateTime = actualDateTime.plusMinutes(15);
     var finalDateTime = initialDateTime.plusMinutes(1);
-    when(parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED, initialDateTime,
-        finalDateTime)).thenReturn(Collections.emptyList());
+    when(parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.FIXED, initialDateTime, finalDateTime)).thenReturn(Collections.emptyList());
 
     var parkingList = getParkingTypeFixedThatWillFinishIn15MinutesFromNowUseCase.execute(
         ParkingType.FIXED.name(), actualDateTime);

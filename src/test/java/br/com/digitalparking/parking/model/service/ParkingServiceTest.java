@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import br.com.digitalparking.parking.infrastructure.repository.ParkingRepository;
+import br.com.digitalparking.parking.model.enums.ParkingState;
 import br.com.digitalparking.parking.model.enums.ParkingType;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -29,11 +30,12 @@ class ParkingServiceTest {
     var finalDateTime = initialDateTime.plusMinutes(1);
     var parking = createNewParking();
     parking.setFinalParking(initialDateTime);
-    when(parkingRepository.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED,
-        initialDateTime, finalDateTime)).thenReturn(Collections.singletonList(parking));
+    when(parkingRepository.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.FIXED, initialDateTime, finalDateTime)).thenReturn(
+        Collections.singletonList(parking));
 
-    var parkingList = parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED,
-        initialDateTime, finalDateTime);
+    var parkingList = parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(
+        ParkingState.BUSY, ParkingType.FIXED, initialDateTime, finalDateTime);
 
     assertThat(parkingList).isNotNull().isNotEmpty();
   }
@@ -43,11 +45,11 @@ class ParkingServiceTest {
     var actualDateTime = LocalDateTime.now();
     var initialDateTime = actualDateTime.plusMinutes(15);
     var finalDateTime = initialDateTime.plusMinutes(1);
-    when(parkingRepository.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED,
-        initialDateTime, finalDateTime)).thenReturn(Collections.emptyList());
+    when(parkingRepository.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.FIXED, initialDateTime, finalDateTime)).thenReturn(Collections.emptyList());
 
-    var parkingList = parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED,
-        initialDateTime, finalDateTime);
+    var parkingList = parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(
+        ParkingState.BUSY, ParkingType.FIXED, initialDateTime, finalDateTime);
 
     assertThat(parkingList).isNotNull().isEmpty();
   }
@@ -58,11 +60,12 @@ class ParkingServiceTest {
     var finalDateTime = initialDateTime.plusMinutes(1);
     var parking = createNewParking();
     parking.setFinalParking(initialDateTime);
-    when(parkingRepository.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED,
-        initialDateTime, finalDateTime)).thenReturn(Collections.singletonList(parking));
+    when(parkingRepository.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.FIXED, initialDateTime, finalDateTime)).thenReturn(
+        Collections.singletonList(parking));
 
-    var parkingList = parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED,
-        initialDateTime, finalDateTime);
+    var parkingList = parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(
+        ParkingState.BUSY, ParkingType.FIXED, initialDateTime, finalDateTime);
 
     assertThat(parkingList).isNotNull().isNotEmpty();
   }
@@ -71,11 +74,11 @@ class ParkingServiceTest {
   void shouldNotFindParkingFlexWhenParkingDoesNotExistWithFinishDateTimeParkingIsNow() {
     var initialDateTime = LocalDateTime.now();
     var finalDateTime = initialDateTime.plusMinutes(1);
-    when(parkingRepository.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED,
-        initialDateTime, finalDateTime)).thenReturn(Collections.emptyList());
+    when(parkingRepository.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
+        ParkingType.FIXED, initialDateTime, finalDateTime)).thenReturn(Collections.emptyList());
 
-    var parkingList = parkingService.findByParkingTypeAndFinalParkingBetween(ParkingType.FIXED,
-        initialDateTime, finalDateTime);
+    var parkingList = parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(
+        ParkingState.BUSY, ParkingType.FIXED, initialDateTime, finalDateTime);
 
     assertThat(parkingList).isNotNull().isEmpty();
   }
