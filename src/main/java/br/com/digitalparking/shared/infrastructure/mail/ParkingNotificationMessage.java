@@ -1,6 +1,6 @@
 package br.com.digitalparking.shared.infrastructure.mail;
 
-public interface ParkingNotificationMail {
+public interface ParkingNotificationMessage {
 
   void send(String from, String to, String subject, String content);
 }

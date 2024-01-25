@@ -2,7 +2,7 @@ package br.com.digitalparking.parking.infrastructure.listener;
 
 import br.com.digitalparking.parking.application.event.ParkingTypeFixedToFinishEvent;
 import br.com.digitalparking.parking.model.entity.Parking;
-import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMail;
+import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 public class ParkingTypeFixedToFinishMailListener {
 
   private static final String EMAIL_SUBJECT = "Attention! 15 minutes to complete your car parking period";
-  private final ParkingNotificationMail parkingNotificationMail;
+  private final ParkingNotificationMessage parkingNotificationMessage;
   private final String notificationEmailAddress;
 
-  public ParkingTypeFixedToFinishMailListener(ParkingNotificationMail parkingNotificationMail,
+  public ParkingTypeFixedToFinishMailListener(ParkingNotificationMessage parkingNotificationMessage,
       @Value("${spring.mail.username}") String notificationEmailAddress) {
-    this.parkingNotificationMail = parkingNotificationMail;
+    this.parkingNotificationMessage = parkingNotificationMessage;
     this.notificationEmailAddress = notificationEmailAddress;
   }
 
@@ -29,7 +29,7 @@ public class ParkingTypeFixedToFinishMailListener {
     for (Parking parking : parkingList) {
       var user = parking.getUser();
       var content = createEmailContentFrom(parking);
-      parkingNotificationMail.send(notificationEmailAddress, user.getEmail(), EMAIL_SUBJECT,
+      parkingNotificationMessage.send(notificationEmailAddress, user.getEmail(), EMAIL_SUBJECT,
           content);
     }
   }

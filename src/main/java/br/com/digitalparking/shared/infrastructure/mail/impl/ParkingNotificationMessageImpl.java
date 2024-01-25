@@ -1,6 +1,6 @@
 package br.com.digitalparking.shared.infrastructure.mail.impl;
 
-import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMail;
+import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMessage;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -8,11 +8,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ParkingNotificationMailImpl implements ParkingNotificationMail {
+public class ParkingNotificationMessageImpl implements ParkingNotificationMessage {
 
   private final JavaMailSender mailSender;
 
-  public ParkingNotificationMailImpl(JavaMailSender mailSender) {
+  public ParkingNotificationMessageImpl(JavaMailSender mailSender) {
     this.mailSender = mailSender;
   }
 
