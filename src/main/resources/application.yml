@@ -9,6 +9,18 @@ spring:
     url: jdbc:postgresql://localhost:5432/digitalparking-db
     username: digitalparking-postgres-user
     password: digitalparking-postgres-pwd
+  mail:
+    host: smtp.ethereal.email
+    port: 587
+    username: kayla45@ethereal.email
+    password: x34sZvrdC1D8eZmpbq
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 server:
   port: 8081
