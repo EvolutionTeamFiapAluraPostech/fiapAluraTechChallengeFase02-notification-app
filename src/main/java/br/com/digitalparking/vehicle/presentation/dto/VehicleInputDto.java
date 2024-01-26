@@ -12,4 +12,13 @@ public record VehicleInputDto(String id, String description, String licensePlate
   public static VehicleInputDto from(Vehicle vehicleCreated) {
     return new VehicleInputDto(vehicleCreated);
   }
+
+  public static Vehicle to(VehicleInputDto vehicleInputDto) {
+    return Vehicle.builder()
+        .description(vehicleInputDto.description)
+        .licensePlate(vehicleInputDto.licensePlate)
+        .color(vehicleInputDto.color)
+        .active(true)
+        .build();
+  }
 }

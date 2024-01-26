@@ -1,5 +1,6 @@
 package br.com.digitalparking.parking.taskscheduler;
 
+import br.com.digitalparking.ParkingNotificationApplication;
 import br.com.digitalparking.parking.application.event.ParkingTypeFixedToFinishEvent;
 import br.com.digitalparking.parking.application.event.ParkingTypeFixedToFinishEventPublisher;
 import br.com.digitalparking.parking.application.usecase.GetParkingTypeFixedThatWillFinishIn15MinutesFromNowUseCase;
@@ -30,5 +31,6 @@ public class ParkingTypeFixedToFinishScheduler implements Runnable {
       parkingTypeFixedToFinishEventPublisher.publishEvent(
           new ParkingTypeFixedToFinishEvent(listOfParkingToFinish));
     }
+    ParkingNotificationApplication.logger.info("Parking fixed will finish in 15 minutes thread executed");
   }
 }

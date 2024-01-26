@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ParkingTypeFlexToCompleteOneHourMailListener {
 
-  private static final String EMAIL_SUBJECT = "Attention! One hour completed of your car parking period.";
+  private static final String EMAIL_SUBJECT = "Attention! One completed hour of your car parking period.";
   private final ParkingNotificationMessage parkingNotificationMessage;
   private final String notificationEmailAddress;
 
@@ -39,8 +39,8 @@ public class ParkingTypeFlexToCompleteOneHourMailListener {
     var user = parking.getUser();
     var vehicle = parking.getVehicle();
     return """
-        %s. Attention! One hour completed of your car parking period. Car %s, license plate %s.
-        Start parking %s.
+        %s. Attention! One completed hour of your parking period, which will be extended for
+         another hour unless the parking lot is vacated. Car %s, license plate %s. Start parking %s.
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
         parking.getInitialParking());
   }

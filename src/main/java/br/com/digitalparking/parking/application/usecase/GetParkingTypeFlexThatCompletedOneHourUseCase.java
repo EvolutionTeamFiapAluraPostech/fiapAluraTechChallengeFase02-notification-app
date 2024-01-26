@@ -1,7 +1,8 @@
 package br.com.digitalparking.parking.application.usecase;
 
+import static br.com.digitalparking.parking.model.enums.ParkingState.BUSY;
+
 import br.com.digitalparking.parking.model.entity.Parking;
-import br.com.digitalparking.parking.model.enums.ParkingState;
 import br.com.digitalparking.parking.model.enums.ParkingType;
 import br.com.digitalparking.parking.model.service.ParkingService;
 import java.time.LocalDateTime;
@@ -19,6 +20,6 @@ public class GetParkingTypeFlexThatCompletedOneHourUseCase {
 
   public List<Parking> execute(String parkingType, LocalDateTime initialDateTime) {
     return parkingService.findByParkingStateAndParkingTypeAndInitialParkingGreaterThanEqual(
-        ParkingState.BUSY, ParkingType.valueOf(parkingType), initialDateTime.minusHours(1));
+        BUSY, ParkingType.valueOf(parkingType), initialDateTime.minusHours(1));
   }
 }

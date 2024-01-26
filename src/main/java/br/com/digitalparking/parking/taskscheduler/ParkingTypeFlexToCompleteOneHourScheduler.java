@@ -1,5 +1,6 @@
 package br.com.digitalparking.parking.taskscheduler;
 
+import br.com.digitalparking.ParkingNotificationApplication;
 import br.com.digitalparking.parking.application.event.ParkingTypeFlexToCompleteOneHourEvent;
 import br.com.digitalparking.parking.application.event.ParkingTypeFlexToCompleteOneHourEventPublisher;
 import br.com.digitalparking.parking.application.usecase.GetParkingTypeFlexThatCompletedOneHourUseCase;
@@ -30,5 +31,6 @@ public class ParkingTypeFlexToCompleteOneHourScheduler implements Runnable {
       parkingTypeFlexToCompleteOneHourEventPublisher.publishEvent(
           new ParkingTypeFlexToCompleteOneHourEvent(listOfParkingToFinish));
     }
+    ParkingNotificationApplication.logger.info("Parking flex one completed hour thread executed");
   }
 }

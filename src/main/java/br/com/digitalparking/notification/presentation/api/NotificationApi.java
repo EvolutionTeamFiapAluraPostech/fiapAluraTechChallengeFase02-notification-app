@@ -1,5 +1,6 @@
 package br.com.digitalparking.notification.presentation.api;
 
+import br.com.digitalparking.parking.application.usecase.CreateParkingPaymentNotification;
 import br.com.digitalparking.parking.presentation.dto.ParkingInputDto;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,10 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/notifications")
 public class NotificationApi {
 
-  @PutMapping("/{uuid}")
+  private final CreateParkingPaymentNotification createParkingPaymentNotification;
+
+  public NotificationApi(CreateParkingPaymentNotification createParkingPaymentNotification) {
+    this.createParkingPaymentNotification = createParkingPaymentNotification;
+  }
+
+  @PutMapping("/{uuid}/payment")
   public void putParkingPaymentNotification(@PathVariable String uuid,
       @RequestBody ParkingInputDto parkingInputDto) {
-    System.out.println("Notification test.");
-    System.out.println(parkingInputDto.toString());
+    var parking = ParkingInputDto.to(parkingInputDto);
+    createParkingPaymentNotification.execute(uuid, parking);
   }
 }

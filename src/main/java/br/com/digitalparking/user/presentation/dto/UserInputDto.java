@@ -1,7 +1,6 @@
 package br.com.digitalparking.user.presentation.dto;
 
 import br.com.digitalparking.user.model.entity.User;
-import org.springframework.data.domain.Page;
 
 public record UserInputDto(
     String id,
@@ -11,18 +10,21 @@ public record UserInputDto(
 ) {
 
   public UserInputDto(User user) {
-      this(user.getId() != null ? user.getId().toString() : null,
-          user.getName(),
-          user.getEmail(),
-          user.getCpf());
+    this(user.getId() != null ? user.getId().toString() : null,
+        user.getName(),
+        user.getEmail(),
+        user.getCpf());
   }
 
-  public static Page<UserInputDto> toPage(Page<User> usersPage) {
-    return usersPage.map(UserInputDto::new);
-  }
-
-  public static UserInputDto from(User user){
+  public static UserInputDto from(User user) {
     return new UserInputDto(user);
   }
 
+  public static User to(UserInputDto userInputDto) {
+    return User.builder()
+        .name(userInputDto.name)
+        .email(userInputDto.email)
+        .cpf(userInputDto.cpf)
+        .build();
+  }
 }

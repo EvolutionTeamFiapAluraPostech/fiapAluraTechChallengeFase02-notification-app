@@ -4,9 +4,12 @@ import br.com.digitalparking.parking.infrastructure.repository.ParkingRepository
 import br.com.digitalparking.parking.model.entity.Parking;
 import br.com.digitalparking.parking.model.enums.ParkingState;
 import br.com.digitalparking.parking.model.enums.ParkingType;
+import br.com.digitalparking.shared.exception.NoResultException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 @Service
 public class ParkingService {
@@ -28,5 +31,11 @@ public class ParkingService {
       ParkingState parkingState, ParkingType parkingType, LocalDateTime initialParkingDateTime) {
     return parkingRepository.findByParkingStateAndParkingTypeAndInitialParkingGreaterThanEqual(
         parkingState, parkingType, initialParkingDateTime);
+  }
+
+  public Parking findByIdRequired(UUID uuid) {
+    return parkingRepository.findById(uuid).orElseThrow(
+        () -> new NoResultException(new FieldError(this.getClass().getSimpleName(), "uuid",
+            "Parking is not found with ID %s.".formatted(uuid))));
   }
 }

@@ -1,11 +1,11 @@
 package br.com.digitalparking.parking.application.usecase;
 
+import static br.com.digitalparking.parking.model.enums.ParkingState.BUSY;
+import static br.com.digitalparking.parking.model.enums.ParkingType.FLEX;
 import static br.com.digitalparking.shared.testData.parking.ParkingTestData.createNewParking;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import br.com.digitalparking.parking.model.enums.ParkingState;
-import br.com.digitalparking.parking.model.enums.ParkingType;
 import br.com.digitalparking.parking.model.service.ParkingService;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -26,28 +26,30 @@ class GetParkingTypeFlexThatCompletedOneHourUseCaseTest {
 
   @Test
   void shouldGetListOfParkingFlexWhenWillFinishIn1MinutesFromNow() {
-    var initialDateTime = LocalDateTime.now();
-    var finalDateTime = initialDateTime.plusMinutes(1);
     var parking = createNewParking();
-    parking.setFinalParking(initialDateTime);
-    when(parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
-        ParkingType.FLEX, initialDateTime, finalDateTime)).thenReturn(List.of(parking));
+    var actualDateTime = LocalDateTime.now();
+    var initialDateTime = actualDateTime.minusHours(1);
+    parking.setInitialParking(initialDateTime);
+    when(
+        parkingService.findByParkingStateAndParkingTypeAndInitialParkingGreaterThanEqual(BUSY, FLEX,
+            initialDateTime)).thenReturn(List.of(parking));
 
-    var parkingList = getParkingTypeFlexThatCompletedOneHourUseCase.execute(
-        ParkingType.FLEX.name(), initialDateTime);
+    var parkingList = getParkingTypeFlexThatCompletedOneHourUseCase.execute(FLEX.name(),
+        actualDateTime);
 
     assertThat(parkingList).isNotNull().isNotEmpty();
   }
 
   @Test
   void shouldNotFindParkingFlexWhenParkingDoesNotExistWithFinishDateTimeParkingIs1minuteFromNow() {
-    var initialDateTime = LocalDateTime.now();
-    var finalDateTime = initialDateTime.plusMinutes(1);
-    when(parkingService.findByParkingStateAndParkingTypeAndFinalParkingBetween(ParkingState.BUSY,
-        ParkingType.FLEX, initialDateTime, finalDateTime)).thenReturn(Collections.emptyList());
+    var actualTime = LocalDateTime.now();
+    var initialDateTime = actualTime.minusHours(1);
+    when(
+        parkingService.findByParkingStateAndParkingTypeAndInitialParkingGreaterThanEqual(BUSY, FLEX,
+            initialDateTime)).thenReturn(Collections.emptyList());
 
-    var parkingList = getParkingTypeFlexThatCompletedOneHourUseCase.execute(
-        ParkingType.FLEX.name(), initialDateTime);
+    var parkingList = getParkingTypeFlexThatCompletedOneHourUseCase.execute(FLEX.name(),
+        actualTime);
 
     assertThat(parkingList).isNotNull().isEmpty();
 
