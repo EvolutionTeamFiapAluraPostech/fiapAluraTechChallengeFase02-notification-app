@@ -3,6 +3,7 @@ package br.com.digitalparking.parking.model.entity;
 import br.com.digitalparking.parking.model.enums.ParkingState;
 import br.com.digitalparking.parking.model.enums.ParkingType;
 import br.com.digitalparking.shared.model.entity.BaseEntity;
+import br.com.digitalparking.shared.model.enums.PaymentState;
 import br.com.digitalparking.user.model.entity.User;
 import br.com.digitalparking.vehicle.model.entity.Vehicle;
 import jakarta.persistence.CascadeType;
@@ -65,5 +66,12 @@ public class Parking extends BaseEntity {
       return this.getParkingTime() != null && this.getParkingTime() > 0;
     }
     return this.getParkingTime() != null && this.getParkingTime() >= 0;
+  }
+
+  public String getParkingPaymentStateDescription(Parking parking) {
+    return
+        this.getParkingPayment() != null && this.getParkingPayment().getPaymentState() != null
+            ? this.getParkingPayment().getPaymentState().getStateDescription()
+            : PaymentState.NOT_PAID.getStateDescription();
   }
 }

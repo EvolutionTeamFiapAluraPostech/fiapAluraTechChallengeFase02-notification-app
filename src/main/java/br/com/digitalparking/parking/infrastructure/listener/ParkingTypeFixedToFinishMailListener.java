@@ -3,6 +3,7 @@ package br.com.digitalparking.parking.infrastructure.listener;
 import br.com.digitalparking.parking.application.event.ParkingTypeFixedToFinishEvent;
 import br.com.digitalparking.parking.model.entity.Parking;
 import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMessage;
+import br.com.digitalparking.shared.util.DateUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -15,7 +16,8 @@ public class ParkingTypeFixedToFinishMailListener {
   private final ParkingNotificationMessage parkingNotificationMessage;
   private final String notificationEmailAddress;
 
-  public ParkingTypeFixedToFinishMailListener(ParkingNotificationMessage parkingNotificationMessage,
+  public ParkingTypeFixedToFinishMailListener(
+      ParkingNotificationMessage parkingNotificationMessage,
       @Value("${spring.mail.username}") String notificationEmailAddress) {
     this.parkingNotificationMessage = parkingNotificationMessage;
     this.notificationEmailAddress = notificationEmailAddress;
@@ -37,10 +39,12 @@ public class ParkingTypeFixedToFinishMailListener {
   private String createEmailContentFrom(Parking parking) {
     var user = parking.getUser();
     var vehicle = parking.getVehicle();
+    var paymentStatus = parking.getParkingPaymentStateDescription(parking);
     return """
         %s. Attention! 15 minutes to complete your car parking period. Car %s, license plate %s.
-        Start parking %s. End parking %s
+        Start parking %s. End parking %s. Payment status: %s.
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
-        parking.getInitialParking(), parking.getFinalParking());
+        DateUtil.localDateTimeToDateWithSlash(parking.getInitialParking()),
+        DateUtil.localDateTimeToDateWithSlash(parking.getFinalParking()), paymentStatus);
   }
 }

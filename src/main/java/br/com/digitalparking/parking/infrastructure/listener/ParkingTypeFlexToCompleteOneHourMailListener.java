@@ -3,6 +3,7 @@ package br.com.digitalparking.parking.infrastructure.listener;
 import br.com.digitalparking.parking.application.event.ParkingTypeFlexToCompleteOneHourEvent;
 import br.com.digitalparking.parking.model.entity.Parking;
 import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMessage;
+import br.com.digitalparking.shared.util.DateUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -38,10 +39,12 @@ public class ParkingTypeFlexToCompleteOneHourMailListener {
   private String createEmailContentFrom(Parking parking) {
     var user = parking.getUser();
     var vehicle = parking.getVehicle();
+    var paymentStatus = parking.getParkingPaymentStateDescription(parking);
     return """
         %s. Attention! One completed hour of your parking period, which will be extended for
          another hour unless the parking lot is vacated. Car %s, license plate %s. Start parking %s.
+         Payment status %s
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
-        parking.getInitialParking());
+        DateUtil.localDateTimeToDateWithSlash(parking.getInitialParking()), paymentStatus);
   }
 }

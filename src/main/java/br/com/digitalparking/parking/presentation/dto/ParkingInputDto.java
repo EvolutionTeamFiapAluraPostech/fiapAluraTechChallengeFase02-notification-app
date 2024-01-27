@@ -61,6 +61,7 @@ public record ParkingInputDto(
       var parkingTime = ParkingTime.valueOfDescription(parkingInputDto.parkingTime);
       hour = parkingTime.getHour();
     }
+    var parkingPayment = ParkingPaymentInputDto.to(parkingInputDto.parkingPaymentInputDto);
 
     return Parking.builder()
         .id(UUID.fromString(parkingInputDto.id))
@@ -75,6 +76,7 @@ public record ParkingInputDto(
         .country(parkingInputDto.country)
         .parkingType(ParkingType.valueOf(parkingInputDto.parkingType))
         .parkingTime(hour)
+        .parkingPayment(parkingPayment)
         .build();
   }
 }

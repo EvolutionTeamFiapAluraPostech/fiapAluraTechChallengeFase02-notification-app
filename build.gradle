@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.hamcrest:hamcrest:${versionHamcrest}"
     compileOnly 'org.projectlombok:lombok'
+    compileOnly 'com.sendgrid:sendgrid-java:4.10.1'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'

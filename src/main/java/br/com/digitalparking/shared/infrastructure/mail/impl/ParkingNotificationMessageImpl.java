@@ -4,10 +4,12 @@ import br.com.digitalparking.ParkingNotificationApplication;
 import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMessage;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+@Primary
 @Component
 public class ParkingNotificationMessageImpl implements ParkingNotificationMessage {
 
@@ -28,7 +30,7 @@ public class ParkingNotificationMessageImpl implements ParkingNotificationMessag
       helper.setSubject(subject);
       mimeMessage.setContent(content, "text/html");
       mailSender.send(mimeMessage);
-      ParkingNotificationApplication.logger.info("e-mail sent!");
+      ParkingNotificationApplication.logger.info("e-mail sent! " + content);
     } catch (MessagingException e) {
       ParkingNotificationApplication.logger.error("Error by sending e-mail!  {}", e.getMessage());
     }
