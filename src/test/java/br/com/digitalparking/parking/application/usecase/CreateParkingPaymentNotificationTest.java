@@ -14,6 +14,7 @@ import br.com.digitalparking.shared.application.validator.UuidValidator;
 import br.com.digitalparking.shared.exception.NoResultException;
 import br.com.digitalparking.shared.exception.ValidatorException;
 import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMessage;
+import br.com.digitalparking.shared.util.DateUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,14 +42,16 @@ class CreateParkingPaymentNotificationTest {
   private String createEmailContentFrom(Parking parking) {
     var user = parking.getUser();
     var vehicle = parking.getVehicle();
-    var totalHoursParking = "";
-    var totalAmountPaid = "";
+    var totalHoursParking = parking.getTotalHoursParking();
+    var totalAmountPaid = parking.getTotalAmountToPay();
     return """
         %s. Parking payment made. Car %s, license plate %s. Parking at %s, %s, %s, %s.
         Initial parking %s. Final parking %s. Total hours: %s. Total amount paid: %s
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
         parking.getStreet(), parking.getNeighborhood(), parking.getCity(), parking.getState(),
-        parking.getInitialParking(), parking.getFinalParking(), totalHoursParking, totalAmountPaid);
+        DateUtil.localDateTimeToDateWithSlash(parking.getInitialParking()),
+        DateUtil.localDateTimeToDateWithSlash(parking.getFinalParking()), totalHoursParking,
+        totalAmountPaid);
   }
 
   @BeforeEach

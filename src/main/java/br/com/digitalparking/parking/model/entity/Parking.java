@@ -1,6 +1,7 @@
 package br.com.digitalparking.parking.model.entity;
 
 import br.com.digitalparking.parking.model.enums.ParkingState;
+import br.com.digitalparking.parking.model.enums.ParkingTime;
 import br.com.digitalparking.parking.model.enums.ParkingType;
 import br.com.digitalparking.shared.model.entity.BaseEntity;
 import br.com.digitalparking.shared.model.enums.PaymentState;
@@ -16,6 +17,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -73,5 +75,25 @@ public class Parking extends BaseEntity {
         this.getParkingPayment() != null && this.getParkingPayment().getPaymentState() != null
             ? this.getParkingPayment().getPaymentState().getStateDescription()
             : PaymentState.NOT_PAID.getStateDescription();
+  }
+
+  public long getTotalHoursParking() {
+    if (this.getInitialParking() != null && this.getFinalParking() != null) {
+      return ChronoUnit.HOURS.between(this.getInitialParking(), this.getFinalParking());
+    }
+    return 0;
+  }
+
+  public BigDecimal getTotalAmountToPay() {
+    var totalHoursParking = this.getTotalHoursParking();
+    var parkingTimeValuePerHOur = ParkingTime.ONE.getValuePerHour();
+    return new BigDecimal(parkingTimeValuePerHOur).multiply(new BigDecimal(totalHoursParking));
+  }
+
+  public String getTotalAmountPaid() {
+    if (this.getParkingPayment() == null) {
+      return "";
+    }
+    return this.getParkingPayment().getTotalAmountPaid();
   }
 }

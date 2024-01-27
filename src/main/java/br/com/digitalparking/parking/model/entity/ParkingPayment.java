@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,4 +32,11 @@ public class ParkingPayment extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private PaymentState paymentState;
   private BigDecimal paymentValue;
+
+  public String getTotalAmountPaid() {
+    if (this.getPaymentValue() == null || BigDecimal.ZERO.equals(this.getPaymentValue())) {
+      return "R$ 0.00";
+    }
+    return new DecimalFormat("R$ #,##0.00").format(this.getPaymentValue());
+  }
 }

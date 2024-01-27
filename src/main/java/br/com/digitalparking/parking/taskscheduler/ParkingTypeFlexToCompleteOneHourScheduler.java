@@ -25,11 +25,16 @@ public class ParkingTypeFlexToCompleteOneHourScheduler implements Runnable {
   @Scheduled(cron = "0 */1 * * * *")
   @Override
   public void run() {
-    var listOfParkingToFinish = getParkingTypeFlexThatCompletedOneHourUseCase.execute(
-        ParkingType.FLEX.name(), LocalDateTime.now());
-    if (!listOfParkingToFinish.isEmpty()) {
-      parkingTypeFlexToCompleteOneHourEventPublisher.publishEvent(
-          new ParkingTypeFlexToCompleteOneHourEvent(listOfParkingToFinish));
+    var actualLocalDateTime = LocalDateTime.now();
+    for (int hourCompleted = 1; hourCompleted < 13; hourCompleted++) {
+      var listOfParkingToFinish = getParkingTypeFlexThatCompletedOneHourUseCase.execute(
+          ParkingType.FLEX.name(), actualLocalDateTime);
+
+      if (!listOfParkingToFinish.isEmpty()) {
+        parkingTypeFlexToCompleteOneHourEventPublisher.publishEvent(
+            new ParkingTypeFlexToCompleteOneHourEvent(listOfParkingToFinish));
+      }
+      actualLocalDateTime = actualLocalDateTime.plusHours(1);
     }
     ParkingNotificationApplication.logger.info("Parking flex one completed hour thread executed");
   }

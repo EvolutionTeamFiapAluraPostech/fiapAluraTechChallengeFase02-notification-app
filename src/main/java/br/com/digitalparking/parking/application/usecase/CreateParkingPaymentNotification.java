@@ -6,8 +6,6 @@ import br.com.digitalparking.shared.application.validator.EmailValidator;
 import br.com.digitalparking.shared.application.validator.UuidValidator;
 import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMessage;
 import br.com.digitalparking.shared.util.DateUtil;
-import java.text.DecimalFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,10 +33,11 @@ public class CreateParkingPaymentNotification {
 
   public void execute(String uuid, Parking parking) {
     uuidValidator.validate(uuid);
-    parkingService.findByIdRequired(UUID.fromString(uuid));
-    var user = parking.getUser();
+    var parkingFound = parkingService.findByIdRequired(UUID.fromString(uuid));
+    parkingFound.setParkingPayment(parking.getParkingPayment());
+    var user = parkingFound.getUser();
     emailValidator.validate(user.getEmail());
-    var content = createEmailContentFrom(parking);
+    var content = createEmailContentFrom(parkingFound);
     parkingNotificationMessage.send(notificationEmailAddress, user.getEmail(), EMAIL_SUBJECT,
         content);
   }
@@ -48,30 +47,13 @@ public class CreateParkingPaymentNotification {
     var vehicle = parking.getVehicle();
     var initialDate = DateUtil.localDateTimeToDateWithSlash(parking.getInitialParking());
     var finalDate = DateUtil.localDateTimeToDateWithSlash(parking.getFinalParking());
-    var totalHoursParking = getTotalHoursParking(parking);
-    var totalAmountPaid = getTotalAmountPaid(parking);
+    var totalHoursParking = parking.getTotalHoursParking();
+    var totalAmountPaid = parking.getTotalAmountPaid();
     return """
         %s. Parking payment made. Car %s, license plate %s. Parking at %s, %s, %s, %s.
         Initial parking %s. Final parking %s. Total hours: %s. Total amount paid: %s
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
         parking.getStreet(), parking.getNeighborhood(), parking.getCity(), parking.getState(),
         initialDate, finalDate, totalHoursParking, totalAmountPaid);
-  }
-
-  private String getTotalAmountPaid(Parking parking) {
-    if (parking.getParkingPayment() == null
-        || parking.getParkingPayment().getPaymentValue() == null) {
-      return "R$ 0.00";
-    }
-    return new DecimalFormat("R$ #,##0.00").format(
-        parking.getParkingPayment().getPaymentValue());
-  }
-
-  private long getTotalHoursParking(Parking parking) {
-    if (parking.getInitialParking() == null || parking.getFinalParking() == null) {
-      return 0;
-    }
-    return ChronoUnit.HOURS.between(parking.getInitialParking(),
-        parking.getFinalParking());
   }
 }
