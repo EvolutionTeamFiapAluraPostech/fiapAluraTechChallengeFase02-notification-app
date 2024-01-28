@@ -1,38 +1,22 @@
 package br.com.digitalparking.notification.presentation.api;
 
-import br.com.digitalparking.parking.application.usecase.CreateParkingCloseNotification;
-import br.com.digitalparking.parking.application.usecase.CreateParkingPaymentNotification;
 import br.com.digitalparking.parking.presentation.dto.ParkingInputDto;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@RestController
-@RequestMapping("/notifications")
-public class NotificationApi {
+@Tag(name = "NotificationApi", description = "API de notificação de estacionamento")
+public interface NotificationApi {
 
-  private final CreateParkingPaymentNotification createParkingPaymentNotification;
-  private final CreateParkingCloseNotification createParkingCloseNotification;
+  @Operation(summary = "Notificar o pagamento de estacionamento feito pelo usuário",
+      description = "Este endpoint é consumido pela aplicação Digital Parking para notificar o usuário (por email) que o pagamento pelo estacionamento foi feito",
+      tags = {"notification"})
+  void putParkingPaymentNotification(@Parameter(description = "Parking id") String uuid,
+      @Parameter(description = "Parking input DTO") ParkingInputDto parkingInputDto);
 
-  public NotificationApi(CreateParkingPaymentNotification createParkingPaymentNotification,
-      CreateParkingCloseNotification createParkingCloseNotification) {
-    this.createParkingPaymentNotification = createParkingPaymentNotification;
-    this.createParkingCloseNotification = createParkingCloseNotification;
-  }
-
-  @PutMapping("/{uuid}/payment")
-  public void putParkingPaymentNotification(@PathVariable String uuid,
-      @RequestBody ParkingInputDto parkingInputDto) {
-    var parking = ParkingInputDto.to(parkingInputDto);
-    createParkingPaymentNotification.execute(uuid, parking);
-  }
-
-  @PutMapping("/{uuid}/close")
-  public void putParkingCloseNotification(@PathVariable String uuid,
-      @RequestBody ParkingInputDto parkingInputDto) {
-    var parking = ParkingInputDto.to(parkingInputDto);
-    createParkingCloseNotification.execute(uuid, parking);
-  }
+  @Operation(summary = "Notificar o encerramento do estacionamento",
+      description = "Este endpoint é consumido pela aplicação Digital Parking para notificar o usuário (por email) que o estacionamento foi encerrado",
+      tags = {"notification"})
+  void putParkingCloseNotification(@Parameter(description = "Parking id") String uuid,
+      @Parameter(description = "Parking input DTO") ParkingInputDto parkingInputDto);
 }
