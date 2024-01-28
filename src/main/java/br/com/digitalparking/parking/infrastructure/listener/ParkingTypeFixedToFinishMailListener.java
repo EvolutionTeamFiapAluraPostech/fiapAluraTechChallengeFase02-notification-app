@@ -45,10 +45,12 @@ public class ParkingTypeFixedToFinishMailListener {
     var paymentStatus = parking.getParkingPaymentStateDescription();
     return """
         %s. Attention! 15 minutes to complete your car parking period. Car %s, license plate %s.
-        Start parking %s. End parking %s. Amount per hour %s. Payment status: %s.
+        Start parking %s. End parking %s.
+        Amount per hour %s. Payment status: %s.
+        Digital Parking - Transaction ID: %s
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
         DateUtil.localDateTimeToDateWithSlash(parking.getInitialParking()),
         DateUtil.localDateTimeToDateWithSlash(parking.getFinalParking()), amountPerHour,
-        paymentStatus);
+        paymentStatus, parking.getId());
   }
 }

@@ -52,11 +52,14 @@ class CreateParkingPaymentNotificationTest {
     var paymentStatus = parking.getParkingPaymentStateDescription();
     return """
         %s. Parking payment made. Car %s, license plate %s. Parking at %s, %s, %s, %s.
-        Initial parking %s. Final parking %s. Amount per hour: %s. Total hours: %s.
+        Initial parking %s. Final parking %s.
+        Amount per hour: %s. Total hours: %s.
         Total amount paid: %s. Payment status %s.
+        Digital Parking - Transaction ID: %s
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
         parking.getStreet(), parking.getNeighborhood(), parking.getCity(), parking.getState(),
-        initialDate, finalDate, amountPerHour, totalHoursParking, totalAmountPaid, paymentStatus);
+        initialDate, finalDate, amountPerHour, totalHoursParking, totalAmountPaid, paymentStatus,
+        parking.getParkingPayment().getId());
   }
 
   @BeforeEach

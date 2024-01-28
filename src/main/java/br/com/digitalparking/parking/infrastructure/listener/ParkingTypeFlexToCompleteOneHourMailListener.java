@@ -53,9 +53,10 @@ public class ParkingTypeFlexToCompleteOneHourMailListener {
         %s. Attention! %s completed hour of your parking period, which will be extended for
          another hour unless the parking lot is vacated. Car %s, license plate %s. Start parking %s.
          Amount per hour %s. Predicted value for the parked period %s. Payment status %s.
+         Digital Parking - Transaction ID: %s
         """.formatted(user.getName(), parkingHours, vehicle.getDescription(),
         vehicle.getLicensePlate(),
         DateUtil.localDateTimeToDateWithSlash(parking.getInitialParking()),
-        amountPerHour, predictedValueParkingPeriod, paymentStatus);
+        amountPerHour, predictedValueParkingPeriod, paymentStatus, parking.getId());
   }
 }
