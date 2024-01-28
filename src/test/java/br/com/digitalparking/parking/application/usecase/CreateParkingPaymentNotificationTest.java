@@ -59,7 +59,7 @@ class CreateParkingPaymentNotificationTest {
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
         parking.getStreet(), parking.getNeighborhood(), parking.getCity(), parking.getState(),
         initialDate, finalDate, amountPerHour, totalHoursParking, totalAmountPaid, paymentStatus,
-        parking.getParkingPayment().getId());
+        parking.getId());
   }
 
   @BeforeEach
