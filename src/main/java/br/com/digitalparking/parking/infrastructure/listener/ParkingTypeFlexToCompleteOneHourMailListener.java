@@ -2,6 +2,7 @@ package br.com.digitalparking.parking.infrastructure.listener;
 
 import br.com.digitalparking.parking.application.event.ParkingTypeFlexToCompleteOneHourEvent;
 import br.com.digitalparking.parking.model.entity.Parking;
+import br.com.digitalparking.parking.model.enums.ParkingTime;
 import br.com.digitalparking.shared.infrastructure.mail.ParkingNotificationMessage;
 import br.com.digitalparking.shared.util.DateUtil;
 import java.text.DecimalFormat;
@@ -44,16 +45,17 @@ public class ParkingTypeFlexToCompleteOneHourMailListener {
     var user = parking.getUser();
     var vehicle = parking.getVehicle();
     var parkingHours = parking.getTotalHoursParking();
-    var paymentStatus = parking.getParkingPaymentStateDescription(parking);
+    var amountPerHour = new DecimalFormat("R$ #,##0.00").format(ParkingTime.ONE.getValuePerHour());
     var totalAmountToPay = parking.getTotalAmountToPay();
     var predictedValueParkingPeriod = new DecimalFormat("R$ #,##0.00").format(totalAmountToPay);
+    var paymentStatus = parking.getParkingPaymentStateDescription();
     return """
         %s. Attention! %s completed hour of your parking period, which will be extended for
          another hour unless the parking lot is vacated. Car %s, license plate %s. Start parking %s.
-         Payment status %s. Predicted value for the parked period %s.
+         Amount per hour %s. Predicted value for the parked period %s. Payment status %s.
         """.formatted(user.getName(), parkingHours, vehicle.getDescription(),
         vehicle.getLicensePlate(),
-        DateUtil.localDateTimeToDateWithSlash(parking.getInitialParking()), paymentStatus,
-        predictedValueParkingPeriod);
+        DateUtil.localDateTimeToDateWithSlash(parking.getInitialParking()),
+        amountPerHour, predictedValueParkingPeriod, paymentStatus);
   }
 }

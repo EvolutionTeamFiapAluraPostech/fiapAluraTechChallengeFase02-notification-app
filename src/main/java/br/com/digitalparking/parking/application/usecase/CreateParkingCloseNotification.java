@@ -13,16 +13,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreateParkingPaymentNotification {
+public class CreateParkingCloseNotification {
 
-  private static final String EMAIL_SUBJECT = "Parking payment made";
+  private static final String EMAIL_SUBJECT = "Parking closed";
   private final ParkingService parkingService;
   private final UuidValidator uuidValidator;
   private final EmailValidator emailValidator;
   private final ParkingNotificationMessage parkingNotificationMessage;
   private final String notificationEmailAddress;
 
-  public CreateParkingPaymentNotification(ParkingService parkingService,
+  public CreateParkingCloseNotification(ParkingService parkingService,
       UuidValidator uuidValidator, EmailValidator emailValidator,
       ParkingNotificationMessage parkingNotificationMessage,
       @Value("${spring.mail.username}") String notificationEmailAddress) {
@@ -54,7 +54,7 @@ public class CreateParkingPaymentNotification {
     var totalAmountPaid = parking.getTotalAmountPaid();
     var paymentStatus = parking.getParkingPaymentStateDescription();
     return """
-        %s. Parking payment made. Car %s, license plate %s. Parking at %s, %s, %s, %s.
+        %s. Parking closed. Car %s, license plate %s. Parking at %s, %s, %s, %s.
         Initial parking %s. Final parking %s. Amount per hour: %s. Total hours: %s.
         Total amount paid: %s. Payment status %s.
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),

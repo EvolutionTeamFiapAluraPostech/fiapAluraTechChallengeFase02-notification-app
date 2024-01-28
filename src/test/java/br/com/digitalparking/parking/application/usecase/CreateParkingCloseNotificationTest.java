@@ -27,10 +27,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CreateParkingPaymentNotificationTest {
+class CreateParkingCloseNotificationTest {
 
   private static final String EMAIL_ADDRESS = "kayla45@ethereal.email";
-  private static final String EMAIL_SUBJECT = "Parking payment made";
+  private static final String EMAIL_SUBJECT = "Parking closed";
   @Mock
   private ParkingService parkingService;
   @Spy
@@ -39,7 +39,7 @@ class CreateParkingPaymentNotificationTest {
   private EmailValidator emailValidator;
   @Mock
   private ParkingNotificationMessage parkingNotificationMessage;
-  private CreateParkingPaymentNotification createParkingPaymentNotification;
+  private CreateParkingCloseNotification createParkingCloseNotification;
 
   private String createEmailContentFrom(Parking parking) {
     var user = parking.getUser();
@@ -51,7 +51,7 @@ class CreateParkingPaymentNotificationTest {
     var totalAmountPaid = parking.getTotalAmountPaid();
     var paymentStatus = parking.getParkingPaymentStateDescription();
     return """
-        %s. Parking payment made. Car %s, license plate %s. Parking at %s, %s, %s, %s.
+        %s. Parking closed. Car %s, license plate %s. Parking at %s, %s, %s, %s.
         Initial parking %s. Final parking %s. Amount per hour: %s. Total hours: %s.
         Total amount paid: %s. Payment status %s.
         """.formatted(user.getName(), vehicle.getDescription(), vehicle.getLicensePlate(),
@@ -61,19 +61,19 @@ class CreateParkingPaymentNotificationTest {
 
   @BeforeEach
   void setUp() {
-    createParkingPaymentNotification = new CreateParkingPaymentNotification(parkingService,
+    createParkingCloseNotification = new CreateParkingCloseNotification(parkingService,
         uuidValidator, emailValidator, parkingNotificationMessage, EMAIL_ADDRESS);
   }
 
   @Test
-  void shouldNotificateUserOfParkingPayment() {
+  void shouldNotificationUserOfParkingClosed() {
     var parking = createParkingWithPayment();
     var email = parking.getUser().getEmail();
     var content = createEmailContentFrom(parking);
     when(parkingService.findByIdRequired(parking.getId())).thenReturn(parking);
 
     assertDoesNotThrow(
-        () -> createParkingPaymentNotification.execute(parking.getId().toString(), parking));
+        () -> createParkingCloseNotification.execute(parking.getId().toString(), parking));
 
     verify(uuidValidator).validate(parking.getId().toString());
     verify(emailValidator).validate(email);
@@ -88,7 +88,7 @@ class CreateParkingPaymentNotificationTest {
     when(parkingService.findByIdRequired(parking.getId())).thenThrow(NoResultException.class);
 
     assertThrows(NoResultException.class,
-        () -> createParkingPaymentNotification.execute(parking.getId().toString(), parking));
+        () -> createParkingCloseNotification.execute(parking.getId().toString(), parking));
 
     verify(uuidValidator).validate(parking.getId().toString());
     verify(emailValidator, never()).validate(email);
@@ -105,7 +105,7 @@ class CreateParkingPaymentNotificationTest {
     when(parkingService.findByIdRequired(parking.getId())).thenReturn(parking);
 
     assertThrows(ValidatorException.class,
-        () -> createParkingPaymentNotification.execute(parking.getId().toString(), parking));
+        () -> createParkingCloseNotification.execute(parking.getId().toString(), parking));
 
     verify(uuidValidator).validate(parking.getId().toString());
     verify(emailValidator).validate(email);

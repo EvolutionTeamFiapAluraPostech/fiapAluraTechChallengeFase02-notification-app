@@ -70,7 +70,7 @@ public class Parking extends BaseEntity {
     return this.getParkingTime() != null && this.getParkingTime() >= 0;
   }
 
-  public String getParkingPaymentStateDescription(Parking parking) {
+  public String getParkingPaymentStateDescription() {
     return
         this.getParkingPayment() != null && this.getParkingPayment().getPaymentState() != null
             ? this.getParkingPayment().getPaymentState().getStateDescription()
