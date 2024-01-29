@@ -47,3 +47,6 @@ A aplicação estará pronta para receber requisições de notificações de pag
 
 # Documentação da API
 http://localhost:8081/swagger-ui/index.html
+
+# Documentação do PROJETO
+https://www.notion.so/Evolution-Team-Digital-Parking-96c5767bc5ac4506b4497998f261fef9?pvs=4
